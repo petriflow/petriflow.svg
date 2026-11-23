@@ -1,59 +1,79 @@
 <mat-toolbar fxLayout="row" class="app-container mat-toolbar mat-toolbar-single-row">
     <mat-toolbar-row fxFlex>
         <mat-icon id="netgrif-icon" svgIcon="netgrif_logo"></mat-icon>
-        <mat-button-toggle-group [(ngModel)]="_mode" fxLayoutAlign="start end">
-            <mat-button-toggle mat-button [value]="canvasMode.SELECT" (click)="changeCanvasMode(canvasMode.SELECT)">
+        <mat-button-toggle-group [(ngModel)]="_mode" hideSingleSelectionIndicator fxLayoutAlign="start end">
+            <mat-button-toggle mat-button [value]="canvasMode.SELECT"
+                               matTooltip="Select – click an element to select it, drag the empty canvas to move it" matTooltipPosition="below" (click)="changeCanvasMode(canvasMode.SELECT)">
                 <mat-icon svgIcon="cursor-default-outline"></mat-icon>
             </mat-button-toggle>
-            <mat-button-toggle mat-button [value]="canvasMode.PANNING" (click)="changeCanvasMode(canvasMode.PANNING)">
+            <mat-button-toggle mat-button [value]="canvasMode.PANNING"
+                               matTooltip="Pan – drag to move the canvas (middle mouse button pans in every mode)" matTooltipPosition="below" (click)="changeCanvasMode(canvasMode.PANNING)">
                 <mat-icon>open_with</mat-icon>
             </mat-button-toggle>
             <mat-button-toggle mat-button [value]="canvasMode.LASSO"
+                               matTooltip="Lasso – drag a rectangle to select several elements" matTooltipPosition="below"
                                (click)="changeCanvasMode(canvasMode.LASSO)">
                 <mat-icon>tab_unselected</mat-icon>
             </mat-button-toggle>
             <mat-button-toggle mat-button [value]="canvasMode.CREATE_TRANSITION"
+                               matTooltip="Add transition – click on the canvas" matTooltipPosition="below"
                                (click)="changeCanvasMode(canvasMode.CREATE_TRANSITION)">
                 <mat-icon svgIcon="transition"></mat-icon>
             </mat-button-toggle>
             <mat-button-toggle mat-button [value]="canvasMode.CREATE_PLACE"
+                               matTooltip="Add place – click on the canvas" matTooltipPosition="below"
                                (click)="changeCanvasMode(canvasMode.CREATE_PLACE)">
                 <mat-icon svgIcon="place"></mat-icon>
             </mat-button-toggle>
             <mat-button-toggle mat-button [value]="canvasMode.CREATE_REGULAR_ARC"
+                               matTooltip="Add arc – click the source and then the target element" matTooltipPosition="below"
                                (click)="changeCanvasMode(canvasMode.CREATE_REGULAR_ARC)">
                 <mat-icon svgIcon="arc"></mat-icon>
             </mat-button-toggle>
             <mat-button-toggle mat-button [value]="canvasMode.CREATE_RESET_ARC"
+                               matTooltip="Add reset arc – click a place and then a transition" matTooltipPosition="below"
                                (click)="changeCanvasMode(canvasMode.CREATE_RESET_ARC)">
                 <mat-icon svgIcon="resetarc"></mat-icon>
             </mat-button-toggle>
             <mat-button-toggle mat-button [value]="canvasMode.CREATE_INHIBITOR_ARC"
+                               matTooltip="Add inhibitor arc – click a place and then a transition" matTooltipPosition="below"
                                (click)="changeCanvasMode(canvasMode.CREATE_INHIBITOR_ARC)">
                 <mat-icon svgIcon="inhibitor"></mat-icon>
             </mat-button-toggle>
             <mat-button-toggle mat-button [value]="canvasMode.CREATE_READ_ARC"
+                               matTooltip="Add read arc – click a place and then a transition" matTooltipPosition="below"
                                (click)="changeCanvasMode(canvasMode.CREATE_READ_ARC)">
                 <mat-icon svgIcon="read"></mat-icon>
             </mat-button-toggle>
-            <mat-button-toggle mat-button [value]="canvasMode.MOVE" (click)="changeCanvasMode(canvasMode.MOVE)">
+            <mat-button-toggle mat-button [value]="canvasMode.MOVE"
+                               matTooltip="Move – drag elements, drag the empty canvas to move it" matTooltipPosition="below" (click)="changeCanvasMode(canvasMode.MOVE)">
                 <mat-icon>all_out</mat-icon>
             </mat-button-toggle>
-            <mat-button-toggle mat-button [value]="canvasMode.REMOVE" (click)="changeCanvasMode(canvasMode.REMOVE)">
+            <mat-button-toggle mat-button [value]="canvasMode.REMOVE"
+                               matTooltip="Remove – click an element to delete it" matTooltipPosition="below" (click)="changeCanvasMode(canvasMode.REMOVE)">
                 <mat-icon>delete_outline</mat-icon>
             </mat-button-toggle>
-            <mat-button-toggle mat-button (click)="openDialog()">
+            <mat-button-toggle mat-button (click)="openDialog()"
+                               matTooltip="About Petriflow SVG" matTooltipPosition="below">
                 <mat-icon>info</mat-icon>
             </mat-button-toggle>
-            <mat-button-toggle mat-button (click)="petriflowCanvasService.gridOnOff()">
+            <mat-button-toggle mat-button (click)="petriflowCanvasService.gridOnOff()"
+                               matTooltip="Show / hide grid" matTooltipPosition="below">
                 <mat-icon>clear</mat-icon>
             </mat-button-toggle>
-            <mat-button-toggle mat-button id="reset-zoom-button" (click)="resetPanZoom()">
+            <mat-button-toggle mat-button id="reset-zoom-button" (click)="resetPanZoom()"
+                               matTooltip="Reset zoom and position" matTooltipPosition="below">
                 <mat-icon>clear</mat-icon>
             </mat-button-toggle>
         </mat-button-toggle-group>
         <div fxFlex></div>
         <div fxLayout="row" fxLayoutAlign="end center">
+            <button mat-icon-button id="theme-button" class="link-icon-button"
+                    aria-label="Toggle light / dark theme"
+                    (click)="toggleTheme()"
+                    matTooltip="Toggle light / dark theme" matTooltipPosition="below">
+                <mat-icon>{{ darkTheme ? 'light_mode' : 'dark_mode' }}</mat-icon>
+            </button>
             <button mat-icon-button id="source-button" class="link-icon-button"
                     aria-label="Source code hosted in GitHub"
                     (click)="goToLink('https://github.com/petriflow/petriflow.svg')"

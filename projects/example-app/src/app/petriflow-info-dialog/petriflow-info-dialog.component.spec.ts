@@ -1,5 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+
 import { PetriflowInfoDialogComponent } from './petriflow-info-dialog.component';
 
 describe('PetriflowInfoDialogComponent', () => {
@@ -8,6 +11,7 @@ describe('PetriflowInfoDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [ MatDialogModule, MatButtonModule ],
       declarations: [ PetriflowInfoDialogComponent ]
     })
     .compileComponents();

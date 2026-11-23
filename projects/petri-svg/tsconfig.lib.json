@@ -4,7 +4,9 @@
         "baseUrl": "./",
         "outDir": "../../dist/petri-svg",
         "module": "esnext",
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
+        "rootDir": "./src/lib",
+        "ignoreDeprecations": "6.0",
         "target": "es5",
         "typeRoots": [
             "./node_modules/@types"

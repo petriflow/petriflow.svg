@@ -1,16 +1,16 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
+/* To learn more about this file see: https://angular.dev/reference/configs/workspace-config. */
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
         "outDir": "../../out-tsc/lib",
-        "target": "es2015",
+        "target": "ES2022",
         "declaration": true,
         "declarationMap": true,
         "inlineSources": true,
         "types": [],
         "lib": [
             "dom",
-            "es2018"
+            "ES2022"
         ],
         "allowSyntheticDefaultImports": true,
         "resolveJsonModule": true,
@@ -19,12 +19,9 @@
     "angularCompilerOptions": {
         "skipTemplateCodegen": true,
         "strictMetadataEmit": true,
-        "enableResourceInlining": true,
-        "fullTemplateTypeCheck": true,
-        "enableIvy": true
+        "enableResourceInlining": true
     },
     "exclude": [
-        "src/test.ts",
         "**/*.spec.ts"
     ],
     "typedocOptions": {

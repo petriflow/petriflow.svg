@@ -47,7 +47,9 @@ export class PetriflowTransition extends PetriflowNode<Transition> {
         this._iconElement = (document.createElementNS(CanvasConfiguration.SVG_NAMESPACE, 'text') as unknown) as SVGTextElement;
         this._iconElement.setAttributeNS(null, 'x', String(this.canvasElement.position.x - CanvasConfiguration.ICON_SIZE / 2));
         this._iconElement.setAttributeNS(null, 'y', String(this.canvasElement.position.y + CanvasConfiguration.ICON_SIZE / 2));
-        this._iconElement.setAttributeNS(null, 'style', `font-family: Material Icons;font-size:${CanvasConfiguration.ICON_SIZE}`);
+        // icon font of the application: --petriflow-svg-icon-font, Material Symbols (Material 3) or Material Icons
+        this._iconElement.setAttributeNS(null, 'style', 'font-family: var(--petriflow-svg-icon-font, '
+            + `'Material Symbols Rounded', 'Material Symbols Outlined', 'Material Icons');font-size:${CanvasConfiguration.ICON_SIZE}px`);
         this._icon = document.createTextNode(icon);
         this._iconElement.appendChild(this._icon);
 

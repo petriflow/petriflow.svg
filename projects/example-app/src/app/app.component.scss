@@ -1,11 +1,30 @@
-@import "../netgif-theme";
+@use '@angular/material' as mat;
 
 .app-container {
     padding: 0 16px;
     width: 100%;
     overflow: hidden;
-    border-bottom: 5px solid #DDDDDD;
-    background-color: map-get($netgrif-blue, 600);;
+    border-bottom: 1px solid var(--mat-sys-outline-variant);
+    @include mat.toolbar-overrides((
+        container-background-color: var(--mat-sys-surface-container),
+        container-text-color: var(--mat-sys-on-surface),
+    ));
+}
+
+// tool icons (assets/modeler/icons) are original SVGs: some inherit the text color (no fill), others are drawn
+// with explicit black / white, those parts follow the text color / background of the toolbar instead (dark mode)
+.app-container mat-button-toggle mat-icon[data-mat-icon-type="svg"] {
+    ::ng-deep [stroke="black"] {
+        stroke: currentColor;
+    }
+
+    ::ng-deep [fill="black"] {
+        fill: currentColor;
+    }
+
+    ::ng-deep [stroke="white"] {
+        stroke: var(--mat-sys-surface-container);
+    }
 }
 
 .inner {
@@ -19,7 +38,7 @@
 }
 
 .link-icon-button {
-    color: #fff;
+    color: var(--mat-sys-on-surface-variant);
 }
 
 #netgrif-icon {

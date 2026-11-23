@@ -1,23 +1,25 @@
 // Karma configuration file, see link for more information
 // https://karma-runner.github.io/1.0/config/configuration-file.html
+// Used by the @angular/build:karma builder (esbuild), which injects the Angular build itself.
 
-process = require('process');
-process.env.CHROME_BIN = require('puppeteer').executablePath();
+const path = require('path');
 
-module.exports = function (config) {
+const coverageDir = path.join(__dirname, '../../coverage/example-app');
+
+module.exports = async function (config) {
+    // puppeteer >= 25 resolves the bundled Chrome path asynchronously
+    process.env.CHROME_BIN ||= await require('puppeteer').executablePath();
+
     config.set({
-        basePath: '../..',
-        frameworks: ['jasmine', '@angular-devkit/build-angular'],
+        basePath: '',
+        frameworks: ['jasmine'],
         plugins: [
             require('karma-jasmine'),
-            require("karma-firefox-launcher"),
             require('karma-chrome-launcher'),
             require('karma-jasmine-html-reporter'),
-            require('karma-coverage-istanbul-reporter'),
-            require("karma-mocha-reporter"),
-            require("karma-nyan-reporter"),
-            require("karma-junit-reporter"),
-            require('@angular-devkit/build-angular/plugins/karma')
+            require('karma-coverage'),
+            require('karma-nyan-reporter'),
+            require('karma-junit-reporter')
         ],
 
         client: {
@@ -27,28 +29,34 @@ module.exports = function (config) {
             }
         },
 
-        coverageIstanbulReporter: {
-            dir: require('path').join(__dirname, './coverage/application-builder'),
-            reports: ['html', 'lcov', 'text-summary', 'json-summary'],
-            fixWebpackSourcePaths: true
+        jasmineHtmlReporter: {
+            suppressAll: true // removes the duplicated traces
         },
-
+        coverageReporter: {
+            dir: coverageDir,
+            subdir: '.',
+            reporters: [
+                {type: 'html'},
+                {type: 'lcovonly'},
+                {type: 'text-summary'},
+                {type: 'json-summary'}
+            ]
+        },
         nyanReporter: {
             suppressErrorReport: false,
             suppressErrorHighlighting: false,
             numberOfRainbowLines: 4,
             renderOnRunCompleteOnly: true
         },
-
         junitReporter: {
-            outputDir: "./coverage/application-builder/", // results will be saved as $outputDir/$browserName.xml
-            outputFile: "JUNITX-test-report.xml", // if included, results will be saved as $outputDir/$browserName/$outputFile
-            suite: "", // suite will become the package name attribute in xml testsuite element
+            outputDir: coverageDir, // results will be saved as $outputDir/$browserName.xml
+            outputFile: 'JUNITX-test-report.xml', // if included, results will be saved as $outputDir/$browserName/$outputFile
+            suite: '', // suite will become the package name attribute in xml testsuite element
             useBrowserName: false, // add browser name to report and classes names
             nameFormatter: undefined, // function (browser, result) to customize the name attribute in xml testcase element
             classNameFormatter: undefined, // function (browser, result) to customize the classname attribute in xml testcase element
             properties: {}, // key value pair of properties to add to the <properties> section of the report
-            xmlVersion: null, // use '1' if reporting to be per SonarQube 6.2 XML format
+            xmlVersion: null // use '1' if reporting to be per SonarQube 6.2 XML format
         },
 
         customLaunchers: {
@@ -65,7 +73,7 @@ module.exports = function (config) {
             }
         },
 
-        reporters: ['progress', 'kjhtml', 'coverage-istanbul', 'nyan', 'junit'],
+        reporters: ['progress', 'kjhtml', 'coverage', 'nyan', 'junit'],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,

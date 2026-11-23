@@ -37,7 +37,7 @@ npm install --save @netgrif/petriflow.svg
 
 ### Requirements
 
-As the library is an Angular library the main dependency is Angular 13 and its modules.
+As the library is an Angular library the main dependency is Angular 22 and its modules.
 For more information about dependencies see [the library package.json](projects/petriflow-svg/package.json).
 
 Since npm v7+ does not install peer dependencies you need to install them yourself. Please
