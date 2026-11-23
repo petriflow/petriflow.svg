@@ -3,11 +3,14 @@
         <pattern id="canvas-grid" [attr.width]="gridConfiguration.size" [attr.height]="gridConfiguration.size"
                  patternUnits="userSpaceOnUse">
             <rect [attr.width]="gridConfiguration.size" [attr.height]="gridConfiguration.size"
-                  fill="white"/>
+                  fill="white" style="fill: var(--petriflow-svg-canvas-background, white)"/>
             <path id="canvas-grid-path" [attr.d]="'M '+gridConfiguration.size+' 0 L 0 0 0 '+gridConfiguration.size"
                   fill="none" [attr.stroke]="gridConfiguration.stroke"
+                  [style.stroke]="'var(--petriflow-svg-grid-color, ' + gridConfiguration.stroke + ')'"
                   stroke-width="1"/>
         </pattern>
     </defs>
-    <rect *ngIf="gridConfiguration.enabled" width="100%" height="100%" fill="url(#canvas-grid)" #canvasGrid/>
+    @if (gridConfiguration.enabled) {
+        <rect width="100%" height="100%" fill="url(#canvas-grid)" #canvasGrid/>
+    }
 </svg>

@@ -11,14 +11,14 @@ jobs:
         with:
           fetch-depth: 0
       - uses: actions/setup-node@v6
-        name: Use Node.js 18
+        name: Use Node.js 24
         with:
-          node-version: 18
+          node-version: 24
           check-latest: false
           registry-url: https://registry.npmjs.org/
       - run: npm install -g npm@^11.5.1
       - run: |
-          npm i --legacy-peer-deps
+          npm i
           cd projects/petri-svg
           npm i
           cd ../..
@@ -26,12 +26,12 @@ jobs:
         run: |
           npm run petrisvg:build
           npm run petrisvg:test:full
-          npm i ./dist/petri-svg --save-optional --legacy-peer-deps
+          npm i ./dist/petri-svg --save-optional
       - name: Build & test petriflow.svg
         run: |
           npm run petriflowsvg:build
           npm run petriflowsvg:test:full
-          npm i ./dist/petriflow-svg --save-optional --legacy-peer-deps
+          npm i ./dist/petriflow-svg --save-optional
       - name: Edit Path in lcov.info
         run: |
           sed -i 's/SF:.*.projects/SF:projects/g' coverage/petri-svg/lcov.info

@@ -1,119 +1,94 @@
-@import '../../../node_modules/@angular/material/theming';
+// Material 3 theme of the example application.
+// Minimal copy of the @netgrif/components theme (projects/netgrif-components/theming/_index.scss):
+// Netgrif brand palettes, `--mat-sys-*` system tokens, light / dark mode following the OS
+// unless `html.light-theme` / `html.dark-theme` is set, M2 typography class back-compat and base page styles.
+@use '@angular/material' as mat;
+@use 'netgrif-palettes' as palettes;
 
-$typography: mat-typography-config(
-    $font-family: Roboto,
-    $headline: mat-typography-level(32px, 48px, 700)
-);
-@include mat-core();
+$font: Roboto;
 
-$netgrif-blue: (
-    50: #e2eaf0,
-    100: #b7c9d9,
-    200: #87a6c0,
-    300: #5782a7,
-    400: #336794,
-    500: #0f4c81,
-    600: #0d4579,
-    700: #0b3c6e,
-    800: #083364,
-    900: #042451,
-    A100: #ffd180,
-    A200: #ffab40,
-    A400: #ff9100,
-    A700: #ff6d00,
-    contrast: (
-        50: $dark-primary-text,
-        100: $dark-primary-text,
-        200: $dark-primary-text,
-        300: $dark-primary-text,
-        400: $dark-primary-text,
-        500: $light-primary-text,
-        600: $light-primary-text,
-        700: $light-primary-text,
-        800: $light-primary-text,
-        900: $light-primary-text,
-        A100: $dark-primary-text,
-        A200: $dark-primary-text,
-        A400: $dark-primary-text,
-        A700: $dark-primary-text,
-    )
-);
+html {
+    color-scheme: light dark;
+    @include mat.theme((
+        color: (
+            primary: palettes.$primary-palette,
+            tertiary: palettes.$tertiary-palette,
+            theme-type: color-scheme,
+        ),
+        typography: $font,
+        density: 0,
+    ));
 
-$netgrif-grey: (
-    50: #EEEFF0,
-    100: #D5D7D9,
-    200: #BABCC0,
-    300: #9EA1A7,
-    400: #898C94,
-    500: #747881,
-    600: #6C7079,
-    700: #61656E,
-    800: #575B64,
-    900: #444851,
-    A100: #B3CAFB,
-    A200: #83A7F9,
-    A400: #4A82FF,
-    A700: #3070FF,
-    contrast: (
-        50: $dark-primary-text,
-        100: $dark-primary-text,
-        200: $dark-primary-text,
-        300: $dark-primary-text,
-        400: $dark-primary-text,
-        500: $light-primary-text,
-        600: $light-primary-text,
-        700: $light-primary-text,
-        800: $light-primary-text,
-        900: $light-primary-text,
-        A100: $dark-primary-text,
-        A200: $dark-primary-text,
-        A400: $light-primary-text,
-        A700: $light-primary-text,
-    )
-);
+    &.light-theme {
+        color-scheme: light;
+    }
 
-$netgrif-primary: mat-palette($netgrif-blue);
-$netgrif-accent: mat-palette($netgrif-blue, A200, A100, A400);
-$netgrif-warn: mat-palette($mat-red);
+    &.dark-theme {
+        color-scheme: dark;
+    }
+}
 
-$netgrif-theme: mat-light-theme($netgrif-primary, $netgrif-accent, $netgrif-warn);
+// `.mat-typography` / `.mat-body-*` classes, incl. the M2 class names used in templates
+@include mat.typography-hierarchy(mat.define-theme((
+    color: (primary: palettes.$primary-palette),
+    typography: (brand-family: $font, plain-family: $font),
+)), $back-compat: true);
+
+html,
+body {
+    height: 100%;
+}
 
 body {
+    margin: 0;
+    overflow: hidden;
+    background: var(--mat-sys-surface);
+    color: var(--mat-sys-on-surface);
+    font: var(--mat-sys-body-medium);
+
     ::-webkit-scrollbar-track {
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
         border-radius: 10px;
-        background-color: $light-primary-text;
+        background-color: var(--mat-sys-surface-container);
     }
 
     ::-webkit-scrollbar {
         width: 7px;
         height: 7px;
-        background-color: $light-primary-text;
+        background-color: var(--mat-sys-surface-container);
     }
 
     ::-webkit-scrollbar-thumb {
         border-radius: 5px;
         -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
-        background-color: #82A5DD;
+        background-color: var(--mat-sys-primary);
     }
 }
 
-@include angular-material-theme($netgrif-theme);
+// Petri net canvas: white paper with a light grey grid in light mode,
+// dark canvas with a white grid, white strokes and labels in dark mode
+petriflow-svg-canvas {
+    --petriflow-svg-canvas-background: light-dark(#ffffff, #14181c);
+    --petriflow-svg-grid-color: light-dark(#cccccc, rgba(255, 255, 255, 0.22));
+    --petriflow-svg-element-fill: light-dark(#ffffff, #14181c);
+    --petriflow-svg-element-stroke: light-dark(#000000, #ffffff);
+    --petriflow-svg-text-color: light-dark(#000000, #ffffff);
+}
 
 .svg-inactive-stroke {
-    stroke: black !important;
+    stroke: var(--mat-sys-on-surface) !important;
 }
 
 .svg-inactive-fill {
-    fill: black !important;
+    fill: var(--mat-sys-on-surface) !important;
 }
 
 .svg-active-stroke {
-    stroke: map-get($netgrif-blue, A200) !important;
+    stroke: var(--mat-sys-primary) !important;
 }
 
 .svg-active-fill {
-    fill: map-get($netgrif-blue, A200) !important;
+    fill: var(--mat-sys-primary) !important;
 }
 
 .svg-invisible-fill {
@@ -121,23 +96,23 @@ body {
 }
 
 .svg-transition-enabled {
-    stroke: green;
-    fill: yellowgreen;
+    stroke: var(--mat-sys-tertiary);
+    fill: var(--mat-sys-tertiary-container);
 }
 
 .svg-transition-disabled {
-    stroke: red;
-    fill: white;
+    stroke: var(--mat-sys-error);
+    fill: var(--mat-sys-surface-container-lowest);
 }
 
 .svg-transition-firing {
-    stroke: green;
+    stroke: var(--mat-sys-tertiary);
     fill: none;
 }
 
 .svg-fire-arrow-cancel-active {
-    fill: coral;
-    stroke: red;
+    fill: var(--mat-sys-error-container);
+    stroke: var(--mat-sys-error);
 }
 
 .svg-fire-arrow-cancel-inactive {
@@ -146,8 +121,8 @@ body {
 }
 
 .svg-fire-arrow-finish-active {
-    stroke: green;
-    fill: yellowgreen;
+    stroke: var(--mat-sys-tertiary);
+    fill: var(--mat-sys-tertiary-container);
 }
 
 .svg-fire-arrow-finish-inactive {
@@ -171,6 +146,6 @@ body {
 
 @keyframes dash {
     to {
-        stroke-dashoffset: 400;
+        stroke-dashoffset: 1000;
     }
 }

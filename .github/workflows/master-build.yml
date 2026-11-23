@@ -12,15 +12,15 @@ jobs:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - name: Use Node.js 18
+      - name: Use Node.js 24
         uses: actions/setup-node@v6
         with:
-          node-version: 18
+          node-version: 24
           check-latest: false
           registry-url: https://registry.npmjs.org/
       - run: npm install -g npm@^11.5.1
       - run: |
-          npm i --legacy-peer-deps
+          npm i
           cd projects/petri-svg
           npm i
           cd ../..
@@ -29,13 +29,13 @@ jobs:
           npm run petrisvg:build
           npm run petrisvg:test:full
           npm run petrisvg:doc
-          npm i ./dist/petri-svg --save-optional --legacy-peer-deps
+          npm i ./dist/petri-svg --save-optional
       - name: Build & test petriflow.svg
         run: |
           npm run petriflowsvg:build
           npm run petriflowsvg:test:full
           npm run petriflowsvg:doc
-          npm i ./dist/petriflow-svg --save-optional --legacy-peer-deps
+          npm i ./dist/petriflow-svg --save-optional
 #      - name: SonarCloud scan
 #        uses: SonarSource/sonarcloud-github-action@master
 #        env:

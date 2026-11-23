@@ -1,10 +1,8 @@
 import {BrowserModule, DomSanitizer} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {AppComponent} from './app.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {FlexLayoutModule} from '@angular/flex-layout';
+import {FlexLayoutModule} from '@ngbracket/ngx-layout';
 import {RouterModule, Routes} from '@angular/router';
-import {JoyrideModule} from 'ngx-joyride';
 import {PetriflowCanvasModule} from '@netgrif/petriflow.svg';
 import {MatIconModule, MatIconRegistry} from '@angular/material/icon';
 import {PetriflowInfoDialogComponent} from './petriflow-info-dialog/petriflow-info-dialog.component';
@@ -13,7 +11,7 @@ import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatDialogModule} from '@angular/material/dialog';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {HttpClientModule} from '@angular/common/http';
+import {provideHttpClient} from '@angular/common/http';
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {FormsModule} from "@angular/forms";
 
@@ -29,10 +27,8 @@ const appRoutes: Routes = [
     ],
     imports: [
         BrowserModule,
-        BrowserAnimationsModule,
         FlexLayoutModule,
         RouterModule.forRoot(appRoutes),
-        JoyrideModule.forRoot(),
         PetriflowCanvasModule,
         MatButtonModule,
         MatIconModule,
@@ -40,12 +36,12 @@ const appRoutes: Routes = [
         MatToolbarModule,
         MatDialogModule,
         MatSnackBarModule,
-        MatButtonModule,
-        HttpClientModule,
         MatTooltipModule,
         FormsModule
     ],
-    entryComponents: [PetriflowInfoDialogComponent],
+    providers: [
+        provideHttpClient()
+    ],
     bootstrap: [
         AppComponent
     ],

@@ -1,27 +1,20 @@
 {
     "compileOnSave": false,
     "compilerOptions": {
-        "baseUrl": "./",
         "outDir": "./dist",
         "module": "esnext",
-        "moduleResolution": "node",
-        "target": "es5",
-        "typeRoots": [
-            "node_modules/@types"
-        ],
+        "moduleResolution": "bundler",
+        "target": "ES2022",
         "lib": [
-            "es2018",
+            "ES2022",
             "dom"
         ],
         "paths": {
-            "jszip": [
-                "./node_modules/jszip/dist/jszip.min.js"
+            "@netgrif/petri.svg": [
+                "./dist/petri-svg"
             ],
-            "petriflow-svg": [
-                "dist/petriflow-svg"
-            ],
-            "petri-svg": [
-                "dist/petri-svg"
+            "@netgrif/petriflow.svg": [
+                "./dist/petriflow-svg"
             ]
         },
         "resolveJsonModule": true,
@@ -29,7 +22,6 @@
         "allowSyntheticDefaultImports": true,
         "sourceMap": true,
         "declaration": false,
-        "downlevelIteration": true,
         "experimentalDecorators": true,
         "importHelpers": true,
         "strict": true,
@@ -42,22 +34,16 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
-
-        /* Debugging options */
-        "traceResolution": false,
-        "listEmittedFiles": false,
-        "listFiles": false,
-        "pretty": true
+        "pretty": true,
+        "ignoreDeprecations": "6.0",
+        "skipLibCheck": true
     },
     "exclude": [
         "**/node_modules/**",
         "**/*.spec.*"
     ],
     "angularCompilerOptions": {
-        "fullTemplateTypeCheck": true,
         "strictInjectionParameters": true,
-        "structMetadataEmit": true,
-        "enableResourceInlining": true,
-        "enableIvy": true
+        "strictTemplates": false
     }
 }

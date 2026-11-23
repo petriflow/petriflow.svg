@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, HostListener} from '@angular/core';
+import {AfterViewInit, ChangeDetectionStrategy, Component, HostListener} from '@angular/core';
 import {
     PetriflowCanvasConfiguration,
     PetriflowCanvasService,
@@ -18,7 +18,9 @@ import {CanvasMode} from './petriflow-control-set/domain/canvas-mode';
     styleUrls: ['./app.component.scss'],
     providers: [
         {provide: PetriflowCanvasService, useExisting: ControlPetriflowCanvasService}
-    ]
+    ],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class AppComponent implements AfterViewInit {
 
@@ -43,6 +45,10 @@ export class AppComponent implements AfterViewInit {
     constructor(public petriflowCanvasService: ControlPetriflowCanvasService,
                 public dialog: MatDialog,
                 private _snackBar: MatSnackBar) {
+        // start in select mode, so no tool (and no action button without a value) looks selected by accident
+        if (!petriflowCanvasService.mode) {
+            petriflowCanvasService.mode = CanvasMode.SELECT;
+        }
         this._mode = petriflowCanvasService.mode;
     }
 
@@ -106,20 +112,20 @@ export class AppComponent implements AfterViewInit {
         this.petriflowCanvasService.selectAll();
     }
 
-    @HostListener('window:keydown.delete', ['$event'])
+    @HostListener('window:keydown.delete')
     onDelete() {
         this.openSnackBar('All selected petri-svg elements deleted');
         this.petriflowCanvasService.deleteSelectedElements();
     }
 
-    @HostListener('window:keydown.escape', ['$event'])
+    @HostListener('window:keydown.escape')
     onEscape() {
         this.petriflowCanvasService.deselectAll();
         this.petriflowCanvasService.deleteClipboard();
         this.petriflowCanvasService.panzoom?.reset();
     }
 
-    @HostListener('window:keydown.+', ['$event'])
+    @HostListener('window:keydown.+')
     onPlusButton() {
         const newScale = !!this.petriflowCanvasService.panzoom?.getScale() ?
             this.petriflowCanvasService.panzoom?.getScale() + this.stepSize : 1.2;
@@ -133,7 +139,7 @@ export class AppComponent implements AfterViewInit {
     }
 
     // TODO: fix move on zoom
-    @HostListener('window:keydown.-', ['$event'])
+    @HostListener('window:keydown.-')
     onMinusButton() {
         const newScale = !!this.petriflowCanvasService.panzoom?.getScale() ?
             this.petriflowCanvasService.panzoom?.getScale() - this.stepSize : 1.2;
@@ -146,22 +152,22 @@ export class AppComponent implements AfterViewInit {
         );
     }
 
-    @HostListener('window:keydown.ArrowUp', ['$event'])
+    @HostListener('window:keydown.ArrowUp')
     onUpButton() {
         this.petriflowCanvasService.panzoom?.pan(0, PetriflowCanvasConfiguration.PANZOOM_MOVE, {relative: true});
     }
 
-    @HostListener('window:keydown.ArrowRight', ['$event'])
+    @HostListener('window:keydown.ArrowRight')
     onRightButton() {
         this.petriflowCanvasService.panzoom?.pan(-PetriflowCanvasConfiguration.PANZOOM_MOVE, 0, {relative: true});
     }
 
-    @HostListener('window:keydown.ArrowDown', ['$event'])
+    @HostListener('window:keydown.ArrowDown')
     onDownButton() {
         this.petriflowCanvasService.panzoom?.pan(0, -PetriflowCanvasConfiguration.PANZOOM_MOVE, {relative: true});
     }
 
-    @HostListener('window:keydown.ArrowLeft', ['$event'])
+    @HostListener('window:keydown.ArrowLeft')
     onLeftButton() {
         this.petriflowCanvasService.panzoom?.pan(PetriflowCanvasConfiguration.PANZOOM_MOVE, 0, {relative: true});
     }
@@ -190,6 +196,21 @@ export class AppComponent implements AfterViewInit {
 
     resetPanZoom() {
         this.petriflowCanvasService.panzoom?.reset();
+    }
+
+    /** Effective color scheme: explicit `html.light-theme` / `html.dark-theme` class, otherwise the OS preference. */
+    public get darkTheme(): boolean {
+        const classes = document.documentElement.classList;
+        if (classes.contains('dark-theme') || classes.contains('light-theme')) {
+            return classes.contains('dark-theme');
+        }
+        return window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+    }
+
+    toggleTheme() {
+        const dark = !this.darkTheme;
+        document.documentElement.classList.toggle('dark-theme', dark);
+        document.documentElement.classList.toggle('light-theme', !dark);
     }
 
     openDialog() {

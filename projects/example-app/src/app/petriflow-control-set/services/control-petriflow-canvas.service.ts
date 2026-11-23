@@ -133,7 +133,7 @@ export class ControlPetriflowCanvasService extends PetriflowCanvasService {
 
     protected mouseDownEvent(e: PointerEvent) {
         e.preventDefault();
-        if (this.mode !== CanvasMode.PANNING) {
+        if (!this.canPan(e)) {
             this.disablePanning();
         }
         if (this.mode === CanvasMode.LASSO) {
@@ -144,6 +144,24 @@ export class ControlPetriflowCanvasService extends PetriflowCanvasService {
             this.mouseY = e.offsetY;
         }
         this.onMouseMoveDownDestroyClipboard();
+    }
+
+    /**
+     * The canvas can be moved
+     * - in panning mode,
+     * - with the middle mouse button in every mode,
+     * - by dragging the empty canvas (grid) in select and move mode.
+     */
+    protected canPan(e: PointerEvent): boolean {
+        if (this.mode === CanvasMode.PANNING || e.button === 1) {
+            return true;
+        }
+        return (this.mode === CanvasMode.SELECT || this.mode === CanvasMode.MOVE) && this.isEmptyCanvas(e.target);
+    }
+
+    protected isEmptyCanvas(target: EventTarget | null): boolean {
+        const element = target as Element | null;
+        return !!element && (element.tagName.toLowerCase() === 'svg' || element.getAttribute('fill') === 'url(#canvas-grid)');
     }
 
     protected mouseUpEvent(e: PointerEvent) {

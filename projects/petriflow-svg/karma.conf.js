@@ -1,24 +1,26 @@
 // Karma configuration file, see link for more information
 // https://karma-runner.github.io/1.0/config/configuration-file.html
+// Used by the @angular/build:karma builder (esbuild), which injects the Angular build itself.
 
-process = require('process')
-process.env.CHROME_BIN = require('puppeteer').executablePath();
+const path = require('path');
 
-module.exports = function (config) {
+const coverageDir = path.join(__dirname, '../../coverage/petriflow-svg');
+
+module.exports = async function (config) {
+    // puppeteer >= 25 resolves the bundled Chrome path asynchronously
+    process.env.CHROME_BIN ||= await require('puppeteer').executablePath();
+
     config.set({
         basePath: '',
-        frameworks: ['jasmine', '@angular-devkit/build-angular'],
+        frameworks: ['jasmine'],
         plugins: [
             require('karma-jasmine'),
-            require('karma-firefox-launcher'),
             require('karma-chrome-launcher'),
             require('karma-jasmine-html-reporter'),
-            require('karma-coverage-istanbul-reporter'),
-            require('karma-mocha-reporter'),
+            require('karma-coverage'),
             require('karma-nyan-reporter'),
             require('karma-junit-reporter'),
-            require('karma-sonarqube-unit-reporter'),
-            require('@angular-devkit/build-angular/plugins/karma')
+            require('karma-sonarqube-unit-reporter')
         ],
 
         client: {
@@ -28,10 +30,18 @@ module.exports = function (config) {
             }
         },
 
-        coverageIstanbulReporter: {
-            dir: require('path').join(__dirname, '../../coverage/petriflow-svg'),
-            reports: ['html', 'text-summary', 'json-summary', 'lcov'],
-            fixWebpackSourcePaths: true
+        jasmineHtmlReporter: {
+            suppressAll: true // removes the duplicated traces
+        },
+        coverageReporter: {
+            dir: coverageDir,
+            subdir: '.',
+            reporters: [
+                {type: 'html'},
+                {type: 'text-summary'},
+                {type: 'json-summary'},
+                {type: 'lcovonly'}
+            ]
         },
         nyanReporter: {
             suppressErrorReport: false,
@@ -40,9 +50,9 @@ module.exports = function (config) {
             renderOnRunCompleteOnly: true
         },
         junitReporter: {
-            outputDir: "../../coverage/petriflow-svg/",
-            outputFile: "JUNITX-test-report.xml",
-            suite: "petriflow.svg",
+            outputDir: coverageDir,
+            outputFile: 'JUNITX-test-report.xml',
+            suite: 'petriflow.svg',
             useBrowserName: false,
             nameFormatter: undefined,
             classNameFormatter: undefined,
@@ -51,7 +61,7 @@ module.exports = function (config) {
         },
         sonarQubeUnitReporter: {
             sonarQubeVersion: 'LATEST',
-            outputFile: '../../coverage/petriflow-svg/sonarqube-report.xml',
+            outputFile: path.join(coverageDir, 'sonarqube-report.xml'),
             useBrowserName: false
         },
 
@@ -69,13 +79,12 @@ module.exports = function (config) {
             }
         },
 
-        reporters: ['progress', 'kjhtml', 'coverage-istanbul', 'nyan', 'junit', 'sonarqubeUnit'],
+        reporters: ['progress', 'kjhtml', 'coverage', 'nyan', 'junit', 'sonarqubeUnit'],
         port: 9876,
         colors: true,
         logLevel: config.LOG_INFO,
         autoWatch: true,
         browsers: ['ChromeHeadlessCI'],
-        // browsers: ['Chrome'],
         singleRun: true,
         restartOnFileChange: false
     });

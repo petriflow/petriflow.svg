@@ -15,23 +15,23 @@ jobs:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
-          node-version: 18
+          node-version: 24
           check-latest: false
           registry-url: https://registry.npmjs.org/
           package-manager-cache: false
       - run: npm install -g npm@^11.5.1
       - name: Build & test libraries
         run: |
-          npm i --legacy-peer-deps
+          npm i
           cd projects/petri-svg
           npm i
           cd ../..
           npm run petrisvg:build
           npm run petrisvg:test:full
-          npm i ./dist/petri-svg --save-optional --legacy-peer-deps
+          npm i ./dist/petri-svg --save-optional
           npm run petriflowsvg:build
           npm run petriflowsvg:test:full
-          npm i ./dist/petriflow-svg --save-optional --legacy-peer-deps
+          npm i ./dist/petriflow-svg --save-optional
           npm run example:build:prod
 
   publish-npm:
@@ -41,7 +41,7 @@ jobs:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
-          node-version: 18
+          node-version: 24
           registry-url: https://registry.npmjs.org/
           package-manager-cache: false
       - run: npm install -g npm@^11.5.1
@@ -49,14 +49,14 @@ jobs:
         uses: zvonimirsun/read-package-version-actions@v2
         id: get_version
       - run: |
-          npm i --legacy-peer-deps
+          npm i
           cd projects/petri-svg
           npm i
           cd ../..
       - name: Build petri.svg
         run: |
           npm run petrisvg:build
-          npm i ./dist/petri-svg --save-optional --legacy-peer-deps
+          npm i ./dist/petri-svg --save-optional
       - name: Publish petri.svg pre-release
         if: ${{ contains(steps.get_version.outputs.version,'-') }}
         run: |
@@ -94,18 +94,18 @@ jobs:
       - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
-          node-version: 18
+          node-version: 24
           registry-url: https://npm.pkg.github.com
       - run: npm install -g npm@^11.5.1
       - run: |
-          npm i --legacy-peer-deps
+          npm i
           cd projects/petri-svg
           npm i
           cd ../..
       - name: Publish petri.svg
         run: |
           npm run petrisvg:build
-          npm i ./dist/petri-svg --save-optional --legacy-peer-deps
+          npm i ./dist/petri-svg --save-optional
           cd dist/petri-svg
           npm publish --access public
           cd ../..

@@ -5,15 +5,11 @@
         "types": [
             "jasmine",
             "node"
-        ],
-        "target": "es2015"
+        ]
     },
-    "files": [
-        "src/test.ts",
-        "src/polyfills.ts"
-    ],
     "include": [
         "src/**/*.spec.ts",
         "src/**/*.d.ts"
-    ]
+    ],
+    "exclude": []
 }
